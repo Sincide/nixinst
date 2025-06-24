@@ -134,9 +134,11 @@ CFG
 
 append_home_config() {
   local hm=/home/$USERNAME/.config/home-manager/home.nix
-  sudo -u "$USERNAME" mkdir -p "$(dirname "$hm")"
+  local dir="$(dirname "$hm")"
+  mkdir -p "$dir"
+  chown -R "$USERNAME":"$USERNAME" "$dir"
   if [[ -f $hm ]]; then
-    sudo -u "$USERNAME" cp "$hm" "$hm.bak.$(date +%s)"
+    cp "$hm" "$hm.bak.$(date +%s)"
   fi
   sudo -u "$USERNAME" bash -c "cat >> '$hm'" <<'HMCFG'
 
