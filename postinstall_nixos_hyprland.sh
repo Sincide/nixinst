@@ -145,11 +145,19 @@ append_home_config() {
   if [[ -f $hm ]]; then
     cp "$hm" "$hm.bak.$(date +%s)"
   fi
-  sudo -u "$USERNAME" bash -c "cat >> '$hm'" <<'HMCFG'
+  local default_ver
+  if command -v nixos-version &>/dev/null; then
+    default_ver=$(nixos-version | cut -d. -f1,2 2>/dev/null || true)
+  fi
+  default_ver=${default_ver:-"23.11"}
+  read -rp "Home Manager state version [${default_ver}]: " hm_ver
+  hm_ver=${hm_ver:-$default_ver}
+  sudo -u "$USERNAME" tee -a "$hm" >/dev/null <<EOF
 
 # Added by postinstall_nixos_hyprland.sh
 { pkgs, ... }:
 {
+  home.stateVersion = "${hm_ver}";
   programs.hyprland.enable = true;
   programs.waybar.enable = true;
   programs.fuzzel.enable = true;
@@ -157,7 +165,7 @@ append_home_config() {
   home.packages = with pkgs; [ matugen ollama foot kitty ];
   services.ollama.enable = true;
 }
-HMCFG
+EOF
   sudo -u "$USERNAME" home-manager switch
 }
 

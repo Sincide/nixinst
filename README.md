@@ -10,6 +10,7 @@ This repository contains a single Bash script `postinstall_nixos_hyprland.sh` to
 - Offers to link or copy configs for Hyprland, Waybar, Fish, Fuzzel and custom scripts
 - Installs and enables Hyprland, Waybar, Fuzzel, Matugen, Ollama, Fish shell and common terminals
 - Lets you choose between editing system configuration or using Home Manager
+- When using Home Manager, prompts for the required `home.stateVersion`
 - Sets up and optionally preloads Ollama models
 - Sets Fish as the default shell
 - Detects additional drives and optionally adds them to configuration
@@ -22,6 +23,8 @@ This repository contains a single Bash script `postinstall_nixos_hyprland.sh` to
    sudo ./postinstall_nixos_hyprland.sh
    ```
 3. Follow the interactive prompts. Have your dotfiles repository URL handy.
+   If you enable Home Manager, you'll be asked for a `home.stateVersion`. The
+   default is derived from your NixOS release.
 
 ### Dotfiles Layout Example
 Your dotfiles repo should contain subdirectories like:
