@@ -136,7 +136,12 @@ append_home_config() {
   local hm=/home/$USERNAME/.config/home-manager/home.nix
   local dir="$(dirname "$hm")"
   mkdir -p "$dir"
-  chown -R "$USERNAME":"$USERNAME" "$dir"
+  local group="$(id -gn "$USERNAME" 2>/dev/null || true)"
+  if [[ -n $group ]]; then
+    chown -R "$USERNAME":"$group" "$dir"
+  else
+    chown -R "$USERNAME" "$dir"
+  fi
   if [[ -f $hm ]]; then
     cp "$hm" "$hm.bak.$(date +%s)"
   fi
